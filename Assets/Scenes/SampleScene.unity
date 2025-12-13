@@ -3628,7 +3628,7 @@ GameObject:
   - component: {fileID: 919132149179781246}
   - component: {fileID: 919132149179781245}
   - component: {fileID: 919132149179781248}
-  - component: {fileID: 919132149179781247}
+  - component: {fileID: 919132149179781249}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -3686,21 +3686,6 @@ CapsuleCollider:
   m_Height: 1.7778226
   m_Direction: 1
   m_Center: {x: -0.003525734, y: 0.8915641, z: 0}
---- !u!114 &919132149179781247
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132149179781244}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fbfb8f0f8ebedd4198afabb49dac43b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AnimationStateController
-  InputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  acceleration: 0.1
-  deacceleration: 0.5
 --- !u!114 &919132149179781248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3713,11 +3698,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b8f14031736794459bb8df0289cd352, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TwoDAnimationStateManager
-  InputActions: {fileID: 0}
-  acceleration: 1
-  decceleration: 0.5
+  InputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  acceleration: 2
+  decceleration: 3
   maximumWalkVel: 0.5
   maximumRunVel: 2
+--- !u!114 &919132149179781249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149179781244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 538a0ce1c6638ef428efa8c9cf0d4571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  InputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  walkSpeed: 5
+  strafeSpeed: 4
+  rotateSpeed: 5
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!4 &1017971965894597233
 Transform:
   m_ObjectHideFlags: 0
