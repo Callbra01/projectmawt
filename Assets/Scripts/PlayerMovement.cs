@@ -77,8 +77,6 @@ public class PlayerMovement : MonoBehaviour
         movement = (transform.forward * v * walkSpeed) + (transform.right * h * strafeSpeed);
         m_rb.MovePosition(transform.position + movement * Time.deltaTime);
 
-        m_animator.SetFloat("ForwardSpeed", v);
-        //m_rb.MovePosition(m_rb.position + transform.forward * m_moveAmt.y * walkSpeed * Time.deltaTime);
     }
 
 }

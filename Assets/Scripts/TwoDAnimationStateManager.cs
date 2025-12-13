@@ -82,8 +82,8 @@ public class TwoDAnimationStateManager: MonoBehaviour
             velocityX = 0.0f;
         }
 
-        // Cap forward
-        if(forwardPressed && sprintPressed && velocityZ > currentMaxVel)
+        // Cap forward------------------------------------------------------------------------------------------------------
+        if (forwardPressed && sprintPressed && velocityZ > currentMaxVel)
         {
             velocityZ = currentMaxVel;
         }
@@ -101,6 +101,48 @@ public class TwoDAnimationStateManager: MonoBehaviour
         else if (forwardPressed && velocityZ < currentMaxVel && velocityZ > (currentMaxVel - 0.05f))
         {
             velocityZ = currentMaxVel;
+        }
+
+        // Cap Left -----------------------------------------------------------------------------------------------------------------------
+        if (leftPressed && sprintPressed && velocityX < -currentMaxVel)
+        {
+            velocityX = -currentMaxVel;
+        }
+        // Deccel to max walk vel
+        else if (leftPressed && velocityX < -currentMaxVel)
+        {
+            velocityX += Time.deltaTime * decceleration;
+            // Round to max vel 
+            if (velocityX < -currentMaxVel && velocityX > (-currentMaxVel - 0.05f))
+            {
+                velocityX = -currentMaxVel;
+            }
+        }
+        // round to max vel
+        else if (leftPressed && velocityX > -currentMaxVel && velocityX < (-currentMaxVel + 0.05f))
+        {
+            velocityX = -currentMaxVel;
+        }
+
+        // Cap Right----------------------------------------------------------------------------------------------------------------------------------------
+        if (rightPressed && sprintPressed && velocityX > currentMaxVel)
+        {
+            velocityX = currentMaxVel;
+        }
+        // Deccel to max walk vel
+        else if (rightPressed && velocityX > currentMaxVel)
+        {
+            velocityX -= Time.deltaTime * decceleration;
+            // Round to max vel 
+            if (velocityX > currentMaxVel && velocityX < (currentMaxVel + 0.05f))
+            {
+                velocityX = currentMaxVel;
+            }
+        }
+        // round to max vel
+        else if (rightPressed && velocityX < currentMaxVel && velocityX > (currentMaxVel - 0.05f))
+        {
+            velocityX = currentMaxVel;
         }
 
         animator.SetFloat("VelocityZ", velocityZ);
