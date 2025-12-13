@@ -68,14 +68,16 @@ public class PlayerMovement : MonoBehaviour
     private void Sprinting()
     {
         float h = m_moveAmt.x;
-        float v = m_moveAmt.y;
+
+        // Clamp vertical input to reduce movement speed when walking backwards
+        float v = Mathf.Clamp(m_moveAmt.y, -0.5f, 1f);
 
         Vector3.Normalize(movement);
 
         movement = (transform.forward * v * walkSpeed) + (transform.right * h * strafeSpeed);
         m_rb.MovePosition(transform.position + movement * Time.deltaTime);
 
-        m_animator.SetFloat("ForwardSpeed", m_moveAmt.y);
+        m_animator.SetFloat("ForwardSpeed", v);
         //m_rb.MovePosition(m_rb.position + transform.forward * m_moveAmt.y * walkSpeed * Time.deltaTime);
     }
 
