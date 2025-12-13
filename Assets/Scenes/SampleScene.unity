@@ -3694,16 +3694,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 919132149179781244}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 538a0ce1c6638ef428efa8c9cf0d4571, type: 3}
+  m_Script: {fileID: 11500000, guid: 1fbfb8f0f8ebedd4198afabb49dac43b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationStateController
   InputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  walkSpeed: 5
-  strafeSpeed: 4
-  rotateSpeed: 5
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 8
+  acceleration: 1
 --- !u!4 &1017971965894597233
 Transform:
   m_ObjectHideFlags: 0
