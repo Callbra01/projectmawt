@@ -29,9 +29,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _CurlScale: 0.1
+    - _CurlSpeed: 0.5
+    - _CurlStrength: 0.09
     - _DensityMultiplier: 0.32
     - _DensityThreshold: 0.687
-    - _LightScattering: 0.74
+    - _LightScattering: 0.985
     - _MaxDistance: 100
     - _NoiseOffset: 2
     - _NoiseTiling: 4.4
@@ -39,5 +42,7 @@ Material:
     m_Colors:
     - _Color: {r: 0.6509434, g: 0.4540272, b: 0.33468318, a: 1}
     - _LightContribution: {r: 0.6792453, g: 0.43747583, b: 0.3556426, a: 1}
+    - _NoiseScroll: {r: 0.1, g: 0.03, b: 0, a: 0}
+    - _NoiseScrollSpeed: {r: 0, g: 0, b: 1, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

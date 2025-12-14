@@ -15,7 +15,8 @@ Shader "Custom/FogBlit"
         [HDR]_LightContribution("Light Contribution", Color) = (1, 1, 1, 1)
 
         _LightScattering("Light Scattering", Range(0, 1)) = 0.2
-        
+
+        _NoiseScroll("Noise Scroll Direction", Vector) = (0.1, 0, 0.05, 0)
     }
 
 
@@ -46,6 +47,7 @@ Shader "Custom/FogBlit"
             float _NoiseTiling;
             float4 _LightContribution;
             float _LightScattering;
+            float3 _NoiseScroll;
 
             float henyey_greenstein(float angle, float scattering)
             {
@@ -54,7 +56,10 @@ Shader "Custom/FogBlit"
 
             float get_density(float3 worldPos)
             {
-                float4 noise = _FogNoise.SampleLevel(sampler_TrilinearRepeat, worldPos * 0.01 * _NoiseTiling, 0);
+                float3 noiseUV = worldPos * 0.01 * _NoiseTiling + _NoiseScroll * _Time.y;
+
+                float4 noise = _FogNoise.SampleLevel(sampler_TrilinearRepeat, noiseUV, 0);
+
                 float density = dot(noise, noise);
                 density = saturate(density - _DensityThreshold) * _DensityMultiplier;
                 return density;
