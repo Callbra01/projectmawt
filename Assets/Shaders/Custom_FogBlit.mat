@@ -35,14 +35,14 @@ Material:
     - _DensityMultiplier: 0.32
     - _DensityThreshold: 0.687
     - _LightScattering: 0.985
-    - _MaxDistance: 100
+    - _MaxDistance: 80
     - _NoiseOffset: 2
     - _NoiseTiling: 4.4
     - _StepSize: 2
     m_Colors:
     - _Color: {r: 0.6509434, g: 0.4540272, b: 0.33468318, a: 1}
     - _LightContribution: {r: 0.6792453, g: 0.43747583, b: 0.3556426, a: 1}
-    - _NoiseScroll: {r: 0.1, g: 0.03, b: 0, a: 0}
+    - _NoiseScroll: {r: 0.5, g: 0.03, b: 0, a: 0}
     - _NoiseScrollSpeed: {r: 0, g: 0, b: 1, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
