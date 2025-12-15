@@ -59,6 +59,7 @@ public class PlayerLook : MonoBehaviour
         mouseLook.y = Mathf.Clamp(mouseLook.y, -80, 90f);
 
         transform.localRotation = Quaternion.AngleAxis(-mouseLook.y, Vector3.right);
+
         player.transform.rotation = Quaternion.AngleAxis(mouseLook.x, player.transform.up);
     }
 }

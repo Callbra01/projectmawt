@@ -13,6 +13,8 @@ public class TwoDAnimationStateManager: MonoBehaviour
     float velocityZ = 0.0f;
     float velocityX = 0.0f;
 
+    int VelocityZHash, VelocityXHash;
+
     public float acceleration = 2.0f;
     public float decceleration = 0.5f;
     public float maximumWalkVel = 0.5f;
@@ -26,28 +28,28 @@ public class TwoDAnimationStateManager: MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    void Update()
+    private void Start()
     {
-        m_moveAmt = m_moveAction.ReadValue<Vector2>();
+        VelocityXHash = Animator.StringToHash("VelocityX");
+        VelocityZHash = Animator.StringToHash("VelocityZ");
+    }
 
-        bool forwardPressed = m_moveAmt.y > 0.0f;
-        bool leftPressed = m_moveAmt.x < 0.0f;
-        bool rightPressed = m_moveAmt.x > 0.0f;
-        bool sprintPressed = m_sprintAction.IsPressed();
-
-        float currentMaxVel = sprintPressed ? maximumRunVel : maximumWalkVel;
-
-        if (forwardPressed && velocityZ < currentMaxVel)
+    void ChangeVelocity(bool forwardPressed, bool leftPressed, bool rightPressed, float currentMaxVelocity)
+    {
+        // increase z vel
+        if (forwardPressed && velocityZ < currentMaxVelocity)
         {
             velocityZ += Time.deltaTime * acceleration;
         }
 
-        if (leftPressed && velocityX > -currentMaxVel)
+        // increase left x vel
+        if (leftPressed && velocityX > -currentMaxVelocity)
         {
             velocityX -= Time.deltaTime * acceleration;
         }
 
-        if (rightPressed && velocityX < currentMaxVel)
+        // increase right x vel
+        if (rightPressed && velocityX < currentMaxVelocity)
         {
             velocityX += Time.deltaTime * acceleration;
         }
@@ -56,12 +58,6 @@ public class TwoDAnimationStateManager: MonoBehaviour
         if (!forwardPressed && velocityZ > 0.0f)
         {
             velocityZ -= Time.deltaTime * decceleration;
-        }
-
-        // Reset z vel
-        if (!forwardPressed && velocityZ < 0.0f)
-        {
-            velocityZ = 0.0f;
         }
 
         // Increase x vel if not pressed
@@ -75,6 +71,15 @@ public class TwoDAnimationStateManager: MonoBehaviour
         {
             velocityX -= Time.deltaTime * decceleration;
         }
+    }
+
+    void ResetOrLockVelocity(bool forwardPressed, bool leftPressed, bool rightPressed, bool sprintPressed, float currentMaxVelocity)
+    {
+        // Reset z vel
+        if (!forwardPressed && velocityZ < 0.0f)
+        {
+            velocityZ = 0.0f;
+        }
 
         // Reset x vel
         if (!leftPressed && !rightPressed && velocityX != 0.0f && (velocityX > -0.05f && velocityX < 0.05f))
@@ -83,69 +88,88 @@ public class TwoDAnimationStateManager: MonoBehaviour
         }
 
         // Cap forward------------------------------------------------------------------------------------------------------
-        if (forwardPressed && sprintPressed && velocityZ > currentMaxVel)
+        if (forwardPressed && sprintPressed && velocityZ > currentMaxVelocity)
         {
-            velocityZ = currentMaxVel;
+            velocityZ = currentMaxVelocity;
         }
+
         // Deccel to max walk vel
-        else if (forwardPressed && velocityZ > currentMaxVel)
+        else if (forwardPressed && velocityZ > currentMaxVelocity)
         {
             velocityZ -= Time.deltaTime * decceleration;
             // Round to max vel 
-            if (velocityZ > currentMaxVel && velocityZ < (currentMaxVel + 0.05f))
+            if (velocityZ > currentMaxVelocity && velocityZ < (currentMaxVelocity + 0.05f))
             {
-                velocityZ = currentMaxVel;
+                velocityZ = currentMaxVelocity;
             }
         }
         // round to max vel
-        else if (forwardPressed && velocityZ < currentMaxVel && velocityZ > (currentMaxVel - 0.05f))
+        else if (forwardPressed && velocityZ < currentMaxVelocity && velocityZ > (currentMaxVelocity - 0.05f))
         {
-            velocityZ = currentMaxVel;
+            velocityZ = currentMaxVelocity;
         }
 
         // Cap Left -----------------------------------------------------------------------------------------------------------------------
-        if (leftPressed && sprintPressed && velocityX < -currentMaxVel)
+        if (leftPressed && sprintPressed && velocityX < -currentMaxVelocity)
         {
-            velocityX = -currentMaxVel;
+            velocityX = -currentMaxVelocity;
         }
         // Deccel to max walk vel
-        else if (leftPressed && velocityX < -currentMaxVel)
+        else if (leftPressed && velocityX < -currentMaxVelocity)
         {
             velocityX += Time.deltaTime * decceleration;
             // Round to max vel 
-            if (velocityX < -currentMaxVel && velocityX > (-currentMaxVel - 0.05f))
+            if (velocityX < -currentMaxVelocity && velocityX > (-currentMaxVelocity - 0.05f))
             {
-                velocityX = -currentMaxVel;
+                velocityX = -currentMaxVelocity;
             }
         }
         // round to max vel
-        else if (leftPressed && velocityX > -currentMaxVel && velocityX < (-currentMaxVel + 0.05f))
+        else if (leftPressed && velocityX > -currentMaxVelocity && velocityX < (-currentMaxVelocity + 0.05f))
         {
-            velocityX = -currentMaxVel;
+            velocityX = -currentMaxVelocity;
         }
 
         // Cap Right----------------------------------------------------------------------------------------------------------------------------------------
-        if (rightPressed && sprintPressed && velocityX > currentMaxVel)
+        if (rightPressed && sprintPressed && velocityX > currentMaxVelocity)
         {
-            velocityX = currentMaxVel;
+            velocityX = currentMaxVelocity;
         }
         // Deccel to max walk vel
-        else if (rightPressed && velocityX > currentMaxVel)
+        else if (rightPressed && velocityX > currentMaxVelocity)
         {
             velocityX -= Time.deltaTime * decceleration;
             // Round to max vel 
-            if (velocityX > currentMaxVel && velocityX < (currentMaxVel + 0.05f))
+            if (velocityX > currentMaxVelocity && velocityX < (currentMaxVelocity + 0.05f))
             {
-                velocityX = currentMaxVel;
+                velocityX = currentMaxVelocity;
             }
         }
         // round to max vel
-        else if (rightPressed && velocityX < currentMaxVel && velocityX > (currentMaxVel - 0.05f))
+        else if (rightPressed && velocityX < currentMaxVelocity && velocityX > (currentMaxVelocity - 0.05f))
         {
-            velocityX = currentMaxVel;
+            velocityX = currentMaxVelocity;
         }
+    }
 
-        animator.SetFloat("VelocityZ", velocityZ);
-        animator.SetFloat("VelocityX", velocityX);
+    void Update()
+    {
+        m_moveAmt = m_moveAction.ReadValue<Vector2>();
+
+        bool forwardPressed = m_moveAmt.y > 0.0f;
+        bool leftPressed = m_moveAmt.x < 0.0f;
+        bool rightPressed = m_moveAmt.x > 0.0f;
+        bool sprintPressed = m_sprintAction.IsPressed();
+
+        float currentMaxVel = sprintPressed ? maximumRunVel : maximumWalkVel;
+
+        ChangeVelocity(forwardPressed, leftPressed, rightPressed, currentMaxVel);
+        ResetOrLockVelocity(forwardPressed, leftPressed, rightPressed, sprintPressed, currentMaxVel);
+
+
+
+        // Set Animator floats
+        animator.SetFloat(VelocityZHash, velocityZ);
+        animator.SetFloat(VelocityXHash, velocityX);
     }
 }

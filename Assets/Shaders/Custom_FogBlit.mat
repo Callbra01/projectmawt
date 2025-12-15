@@ -35,7 +35,7 @@ Material:
     - _DensityMultiplier: 0.32
     - _DensityThreshold: 0.687
     - _LightScattering: 0.985
-    - _MaxDistance: 0
+    - _MaxDistance: 100
     - _NoiseOffset: 2
     - _NoiseTiling: 4.4
     - _StepSize: 2
