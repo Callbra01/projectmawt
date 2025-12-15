@@ -34,12 +34,17 @@ public class TwoDAnimationStateManager: MonoBehaviour
         VelocityZHash = Animator.StringToHash("VelocityZ");
     }
 
-    void ChangeVelocity(bool forwardPressed, bool leftPressed, bool rightPressed, float currentMaxVelocity)
+    void ChangeVelocity(bool forwardPressed, bool backwardPressed, bool leftPressed, bool rightPressed, float currentMaxVelocity)
     {
         // increase z vel
         if (forwardPressed && velocityZ < currentMaxVelocity)
         {
             velocityZ += Time.deltaTime * acceleration;
+        }
+
+        if (backwardPressed && velocityZ > -currentMaxVelocity)
+        {
+            velocityZ -= Time.deltaTime * acceleration;
         }
 
         // increase left x vel
@@ -60,6 +65,11 @@ public class TwoDAnimationStateManager: MonoBehaviour
             velocityZ -= Time.deltaTime * decceleration;
         }
 
+        if (!backwardPressed && velocityZ < 0.0f)
+        {
+            velocityZ += Time.deltaTime * decceleration;
+        }
+
         // Increase x vel if not pressed
         if (!leftPressed && velocityX < 0.0f)
         {
@@ -73,10 +83,10 @@ public class TwoDAnimationStateManager: MonoBehaviour
         }
     }
 
-    void ResetOrLockVelocity(bool forwardPressed, bool leftPressed, bool rightPressed, bool sprintPressed, float currentMaxVelocity)
+    void ResetOrLockVelocity(bool forwardPressed, bool backwardPressed, bool leftPressed, bool rightPressed, bool sprintPressed, float currentMaxVelocity)
     {
         // Reset z vel
-        if (!forwardPressed && velocityZ < 0.0f)
+        if (!forwardPressed && !backwardPressed && velocityZ != 0.0f && (velocityZ > -0.05f && velocityZ < 0.05f))
         {
             velocityZ = 0.0f;
         }
@@ -107,6 +117,27 @@ public class TwoDAnimationStateManager: MonoBehaviour
         else if (forwardPressed && velocityZ < currentMaxVelocity && velocityZ > (currentMaxVelocity - 0.05f))
         {
             velocityZ = currentMaxVelocity;
+        }
+
+        // Cap Backwards -----------------------------------------------------------------------------------------------------------------------
+        if (backwardPressed && sprintPressed && velocityZ < -currentMaxVelocity)
+        {
+            velocityZ = -currentMaxVelocity;
+        }
+        // Deccel to max walk vel
+        else if (backwardPressed && velocityZ < -currentMaxVelocity)
+        {
+            velocityZ += Time.deltaTime * decceleration;
+            // Round to max vel 
+            if (velocityZ < -currentMaxVelocity && velocityZ > (-currentMaxVelocity - 0.05f))
+            {
+                velocityZ = -currentMaxVelocity;
+            }
+        }
+        // round to max vel
+        else if (backwardPressed && velocityZ > -currentMaxVelocity && velocityZ < (-currentMaxVelocity + 0.05f))
+        {
+            velocityZ = -currentMaxVelocity;
         }
 
         // Cap Left -----------------------------------------------------------------------------------------------------------------------
@@ -157,16 +188,22 @@ public class TwoDAnimationStateManager: MonoBehaviour
         m_moveAmt = m_moveAction.ReadValue<Vector2>();
 
         bool forwardPressed = m_moveAmt.y > 0.0f;
+        bool backwardPressed = m_moveAmt.y < 0.0f;
         bool leftPressed = m_moveAmt.x < 0.0f;
         bool rightPressed = m_moveAmt.x > 0.0f;
         bool sprintPressed = m_sprintAction.IsPressed();
 
+        if (backwardPressed)
+        {
+            sprintPressed = false;
+        }
+
         float currentMaxVel = sprintPressed ? maximumRunVel : maximumWalkVel;
 
-        ChangeVelocity(forwardPressed, leftPressed, rightPressed, currentMaxVel);
-        ResetOrLockVelocity(forwardPressed, leftPressed, rightPressed, sprintPressed, currentMaxVel);
+        ChangeVelocity(forwardPressed, backwardPressed, leftPressed, rightPressed, currentMaxVel);
+        ResetOrLockVelocity(forwardPressed, backwardPressed, leftPressed, rightPressed, sprintPressed, currentMaxVel);
 
-
+        Debug.Log(velocityZ);
 
         // Set Animator floats
         animator.SetFloat(VelocityZHash, velocityZ);
